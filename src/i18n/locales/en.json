@@ -1,0 +1,187 @@
+{
+  "app": {
+    "name": "Endeko Dak",
+    "tagline": "Professional Quote Generator"
+  },
+  "nav": {
+    "newQuote": "New Quote",
+    "savedQuotes": "Saved",
+    "settings": "Settings"
+  },
+  "library": {
+    "title": "Library",
+    "services": "Services",
+    "images": "Images",
+    "text": "Text",
+    "searchServices": "Search services...",
+    "uploadImage": "Upload image",
+    "addFromUrl": "Add from URL",
+    "dragToAdd": "Drag to canvas to add"
+  },
+  "builder": {
+    "title": "Quote Builder",
+    "clientDetails": "Client Details",
+    "projectDetails": "Project Details",
+    "emptyCanvas": "Drag services, images or text here to build your quote",
+    "addBlock": "Add block",
+    "deleteBlock": "Delete",
+    "duplicateBlock": "Duplicate",
+    "moveUp": "Move up",
+    "moveDown": "Move down"
+  },
+  "preview": {
+    "title": "PDF Preview",
+    "template": "Template",
+    "templates": {
+      "modern": "Modern",
+      "classy": "Classic",
+      "technical": "Technical",
+      "compact": "Compact"
+    },
+    "download": "Download",
+    "share": "Share",
+    "print": "Print"
+  },
+  "client": {
+    "name": "Name",
+    "companyName": "Company Name",
+    "address": "Address",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "email": "Email",
+    "phone": "Phone"
+  },
+  "service": {
+    "title": "Title",
+    "description": "Description",
+    "specifications": "Specifications",
+    "price": "Price",
+    "quantity": "Quantity",
+    "unit": "Unit",
+    "total": "Total",
+    "addSpecification": "Add specification"
+  },
+  "units": {
+    "m²": "m²",
+    "stuks": "units",
+    "uur": "hours",
+    "meter": "meters",
+    "forfait": "fixed"
+  },
+  "categories": {
+    "dakbedekking": "Roof Covering",
+    "groen-dak": "Green Roof",
+    "hemelwaterafvoer": "Rainwater Drainage",
+    "inspectie": "Inspection",
+    "isolatie": "Insulation",
+    "loodwerk": "Lead Work",
+    "renovatie": "Renovation",
+    "reparatie": "Repair",
+    "zinkwerk": "Zinc Work",
+    "overig": "Other"
+  },
+  "quote": {
+    "number": "Quote Number",
+    "date": "Date",
+    "validUntil": "Valid Until",
+    "subtotal": "Subtotal",
+    "vat": "VAT",
+    "total": "Total",
+    "status": {
+      "draft": "Draft",
+      "sent": "Sent",
+      "accepted": "Accepted",
+      "rejected": "Rejected"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "company": "Company Details",
+    "companyName": "Company Name",
+    "address": "Address",
+    "postalCode": "Postal Code",
+    "city": "City",
+    "phone": "Phone",
+    "email": "Email",
+    "website": "Website",
+    "kvkNumber": "Chamber of Commerce",
+    "btwNumber": "VAT Number",
+    "bankAccount": "Bank Account",
+    "logo": "Logo",
+    "uploadLogo": "Upload logo",
+    "removeLogo": "Remove logo",
+    "app": "App Settings",
+    "language": "Language",
+    "vatRate": "VAT Rate",
+    "defaultTemplate": "Default Template",
+    "autoSave": "Auto Save",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "image": {
+    "caption": "Caption",
+    "width": "Width",
+    "alignment": "Alignment",
+    "widths": {
+      "full": "Full",
+      "half": "Half",
+      "third": "Third"
+    },
+    "alignments": {
+      "left": "Left",
+      "center": "Center",
+      "right": "Right"
+    }
+  },
+  "text": {
+    "content": "Content",
+    "variant": "Type",
+    "variants": {
+      "paragraph": "Paragraph",
+      "heading": "Heading",
+      "note": "Note",
+      "terms": "Terms",
+      "disclaimer": "Disclaimer"
+    }
+  },
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "confirm": "Confirm",
+    "close": "Close"
+  },
+  "messages": {
+    "saved": "Saved!",
+    "deleted": "Deleted",
+    "error": "Something went wrong",
+    "confirmDelete": "Are you sure you want to delete this?",
+    "noQuotes": "No quotes saved yet",
+    "loading": "Loading..."
+  },
+  "defaultServices": {
+    "bitumen": {
+      "title": "Bitumen Roofing",
+      "description": "Complete replacement of bitumen roofing including underlayment"
+    },
+    "pannendak": {
+      "title": "Tile Roof Renovation",
+      "description": "Complete renovation of tile roof including new tiles and components"
+    },
+    "dakgoot": {
+      "title": "Gutter Replacement",
+      "description": "New aluminum gutters with brackets and drains"
+    },
+    "isolatie": {
+      "title": "Roof Insulation",
+      "description": "PIR insulation boards with high R-value for optimal heat insulation"
+    },
+    "loodwerk": {
+      "title": "Lead Work",
+      "description": "Professional lead work around chimneys and roof edges"
+    }
+  }
+}

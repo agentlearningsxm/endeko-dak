@@ -1,0 +1,187 @@
+{
+  "app": {
+    "name": "Endeko Dak",
+    "tagline": "Professionele Offerte Generator"
+  },
+  "nav": {
+    "newQuote": "Nieuwe Offerte",
+    "savedQuotes": "Opgeslagen",
+    "settings": "Instellingen"
+  },
+  "library": {
+    "title": "Bibliotheek",
+    "services": "Diensten",
+    "images": "Afbeeldingen",
+    "text": "Tekst",
+    "searchServices": "Zoek diensten...",
+    "uploadImage": "Upload afbeelding",
+    "addFromUrl": "Voeg toe via URL",
+    "dragToAdd": "Sleep naar canvas om toe te voegen"
+  },
+  "builder": {
+    "title": "Offerte Bouwer",
+    "clientDetails": "Klantgegevens",
+    "projectDetails": "Projectgegevens",
+    "emptyCanvas": "Sleep diensten, afbeeldingen of tekst hier om uw offerte op te bouwen",
+    "addBlock": "Blok toevoegen",
+    "deleteBlock": "Verwijderen",
+    "duplicateBlock": "Dupliceren",
+    "moveUp": "Omhoog",
+    "moveDown": "Omlaag"
+  },
+  "preview": {
+    "title": "PDF Preview",
+    "template": "Sjabloon",
+    "templates": {
+      "modern": "Modern",
+      "classy": "Klassiek",
+      "technical": "Technisch",
+      "compact": "Compact"
+    },
+    "download": "Downloaden",
+    "share": "Delen",
+    "print": "Afdrukken"
+  },
+  "client": {
+    "name": "Naam",
+    "companyName": "Bedrijfsnaam",
+    "address": "Adres",
+    "postalCode": "Postcode",
+    "city": "Plaats",
+    "email": "E-mail",
+    "phone": "Telefoon"
+  },
+  "service": {
+    "title": "Titel",
+    "description": "Beschrijving",
+    "specifications": "Specificaties",
+    "price": "Prijs",
+    "quantity": "Aantal",
+    "unit": "Eenheid",
+    "total": "Totaal",
+    "addSpecification": "Specificatie toevoegen"
+  },
+  "units": {
+    "m²": "m²",
+    "stuks": "stuks",
+    "uur": "uur",
+    "meter": "meter",
+    "forfait": "forfait"
+  },
+  "categories": {
+    "dakbedekking": "Dakbedekking",
+    "groen-dak": "Groen Dak",
+    "hemelwaterafvoer": "Hemelwaterafvoer",
+    "inspectie": "Inspectie",
+    "isolatie": "Isolatie",
+    "loodwerk": "Loodwerk",
+    "renovatie": "Renovatie",
+    "reparatie": "Reparatie",
+    "zinkwerk": "Zinkwerk",
+    "overig": "Overig"
+  },
+  "quote": {
+    "number": "Offertenummer",
+    "date": "Datum",
+    "validUntil": "Geldig tot",
+    "subtotal": "Subtotaal",
+    "vat": "BTW",
+    "total": "Totaal",
+    "status": {
+      "draft": "Concept",
+      "sent": "Verzonden",
+      "accepted": "Geaccepteerd",
+      "rejected": "Afgewezen"
+    }
+  },
+  "settings": {
+    "title": "Instellingen",
+    "company": "Bedrijfsgegevens",
+    "companyName": "Bedrijfsnaam",
+    "address": "Adres",
+    "postalCode": "Postcode",
+    "city": "Plaats",
+    "phone": "Telefoon",
+    "email": "E-mail",
+    "website": "Website",
+    "kvkNumber": "KVK-nummer",
+    "btwNumber": "BTW-nummer",
+    "bankAccount": "Bankrekening",
+    "logo": "Logo",
+    "uploadLogo": "Logo uploaden",
+    "removeLogo": "Logo verwijderen",
+    "app": "App Instellingen",
+    "language": "Taal",
+    "vatRate": "BTW-tarief",
+    "defaultTemplate": "Standaard sjabloon",
+    "autoSave": "Automatisch opslaan",
+    "save": "Opslaan",
+    "cancel": "Annuleren"
+  },
+  "image": {
+    "caption": "Bijschrift",
+    "width": "Breedte",
+    "alignment": "Uitlijning",
+    "widths": {
+      "full": "Volledig",
+      "half": "Half",
+      "third": "Derde"
+    },
+    "alignments": {
+      "left": "Links",
+      "center": "Midden",
+      "right": "Rechts"
+    }
+  },
+  "text": {
+    "content": "Inhoud",
+    "variant": "Type",
+    "variants": {
+      "paragraph": "Paragraaf",
+      "heading": "Koptekst",
+      "note": "Notitie",
+      "terms": "Voorwaarden",
+      "disclaimer": "Disclaimer"
+    }
+  },
+  "actions": {
+    "save": "Opslaan",
+    "cancel": "Annuleren",
+    "delete": "Verwijderen",
+    "edit": "Bewerken",
+    "add": "Toevoegen",
+    "remove": "Verwijderen",
+    "confirm": "Bevestigen",
+    "close": "Sluiten"
+  },
+  "messages": {
+    "saved": "Opgeslagen!",
+    "deleted": "Verwijderd",
+    "error": "Er is iets misgegaan",
+    "confirmDelete": "Weet u zeker dat u dit wilt verwijderen?",
+    "noQuotes": "Nog geen offertes opgeslagen",
+    "loading": "Laden..."
+  },
+  "defaultServices": {
+    "bitumen": {
+      "title": "Bitumen Dakbedekking",
+      "description": "Volledige vervanging van bitumen dakbedekking inclusief onderlaag"
+    },
+    "pannendak": {
+      "title": "Pannendak Renovatie",
+      "description": "Complete renovatie van pannendak inclusief nieuwe pannen en onderdelen"
+    },
+    "dakgoot": {
+      "title": "Dakgoot Vervanging",
+      "description": "Nieuwe aluminium dakgoten met beugels en afvoeren"
+    },
+    "isolatie": {
+      "title": "Dakisolatie",
+      "description": "PIR isolatieplaten met hoge R-waarde voor optimale warmte-isolatie"
+    },
+    "loodwerk": {
+      "title": "Loodwerk",
+      "description": "Professioneel loodwerk rond schoorstenen en dakranden"
+    }
+  }
+}
