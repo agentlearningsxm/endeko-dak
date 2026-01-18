@@ -10,11 +10,11 @@ const textVariants: {
   icon: typeof Type;
   labelKey: string;
 }[] = [
-  { id: 'paragraph', icon: Type, labelKey: 'text.variants.paragraph' },
-  { id: 'heading', icon: Heading, labelKey: 'text.variants.heading' },
-  { id: 'note', icon: StickyNote, labelKey: 'text.variants.note' },
-  { id: 'terms', icon: FileWarning, labelKey: 'text.variants.terms' },
-];
+    { id: 'paragraph', icon: Type, labelKey: 'text.variants.paragraph' },
+    { id: 'heading', icon: Heading, labelKey: 'text.variants.heading' },
+    { id: 'note', icon: StickyNote, labelKey: 'text.variants.note' },
+    { id: 'terms', icon: FileWarning, labelKey: 'text.variants.terms' },
+  ];
 
 export function TextLibrary() {
   const { t } = useTranslation();
@@ -23,7 +23,7 @@ export function TextLibrary() {
     <div className="space-y-4">
       {/* Quick add empty variants */}
       <div>
-        <h3 className="text-sm font-medium text-white/70 mb-2">Leeg blok</h3>
+        <h3 className="text-sm font-bold text-muted-dark light-mode:text-muted-light uppercase tracking-wider mb-2">Leeg blok</h3>
         <div className="space-y-2">
           {textVariants.map((variant) => (
             <DraggableTextItem
@@ -39,7 +39,7 @@ export function TextLibrary() {
 
       {/* Pre-filled templates */}
       <div>
-        <h3 className="text-sm font-medium text-white/70 mb-2">Sjablonen</h3>
+        <h3 className="text-sm font-bold text-muted-dark light-mode:text-muted-light uppercase tracking-wider mb-2">Sjablonen</h3>
         <div className="space-y-2">
           {DEFAULT_TEXT_TEMPLATES.map((template, index) => {
             const variantInfo = textVariants.find((v) => v.id === template.variant);
@@ -91,9 +91,9 @@ function DraggableTextItem({
 
   const style = transform
     ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        zIndex: isDragging ? 1000 : undefined,
-      }
+      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      zIndex: isDragging ? 1000 : undefined,
+    }
     : undefined;
 
   return (
@@ -104,15 +104,15 @@ function DraggableTextItem({
       {...attributes}
       className={cn(
         'p-3 rounded-lg border transition-all duration-200',
-        'bg-white/[0.03] border-white/[0.08]',
-        'hover:bg-white/[0.06] hover:border-white/[0.15]',
+        'bg-background-dark light-mode:bg-white border-border-dark light-mode:border-border-light',
+        'hover:border-primary/50 hover:shadow-md',
         'cursor-grab active:cursor-grabbing',
         isDragging && 'opacity-50 scale-[1.02] shadow-xl'
       )}
     >
       <div className="flex items-start gap-3">
         <div className="flex-none mt-0.5">
-          <GripVertical className="h-4 w-4 text-white/20" />
+          <GripVertical className="h-4 w-4 text-muted-dark light-mode:text-muted-light" />
         </div>
 
         <div className="flex-1 min-w-0">
@@ -120,11 +120,11 @@ function DraggableTextItem({
             <div className="h-6 w-6 rounded bg-secondary/20 flex items-center justify-center">
               <Icon className="h-3 w-3 text-secondary" />
             </div>
-            <h4 className="text-sm font-medium text-white">{label}</h4>
+            <h4 className="text-sm font-medium text-foreground">{label}</h4>
           </div>
 
           {showPreview && content && (
-            <p className="text-xs text-white/40 line-clamp-2">{content}</p>
+            <p className="text-xs text-muted-dark light-mode:text-muted-light line-clamp-2">{content}</p>
           )}
         </div>
       </div>

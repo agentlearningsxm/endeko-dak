@@ -27,17 +27,17 @@ export function SavedQuotesModal() {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <GlassPanel className="w-full max-w-lg max-h-[80vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/[0.1]">
-          <h2 className="text-lg font-semibold text-white">{t('nav.savedQuotes')}</h2>
+        <div className="flex items-center justify-between p-4 border-b border-border-dark light-mode:border-border-light">
+          <h2 className="text-lg font-bold text-foreground">{t('nav.savedQuotes')}</h2>
           <button onClick={closeModal} className="p-2 hover:bg-white/10 rounded-lg">
-            <X className="h-5 w-5 text-white/60" />
+            <X className="h-5 w-5 text-muted-dark light-mode:text-muted-light" />
           </button>
         </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-4">
           {savedQuotes.length === 0 ? (
-            <div className="text-center py-12 text-white/40">
+            <div className="text-center py-12 text-muted-dark light-mode:text-muted-light">
               <FileText className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>{t('messages.noQuotes')}</p>
             </div>
@@ -57,25 +57,25 @@ export function SavedQuotesModal() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
                         <FileText className="h-4 w-4 text-primary" />
-                        <span className="font-medium text-white">{quote.number}</span>
+                        <span className="font-bold text-foreground">{quote.number}</span>
                         <span
                           className={cn(
-                            'px-2 py-0.5 rounded text-xs',
-                            quote.status === 'draft' && 'bg-white/10 text-white/60',
-                            quote.status === 'sent' && 'bg-primary/20 text-primary',
-                            quote.status === 'accepted' && 'bg-success/20 text-success',
-                            quote.status === 'rejected' && 'bg-error/20 text-error'
+                            'px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider',
+                            quote.status === 'draft' && 'bg-background-dark text-muted-dark border border-border-dark',
+                            quote.status === 'sent' && 'bg-primary/10 text-primary border border-primary/20',
+                            quote.status === 'accepted' && 'bg-success/10 text-success border border-success/20',
+                            quote.status === 'rejected' && 'bg-error/10 text-error border border-error/20'
                           )}
                         >
                           {t(`quote.status.${quote.status}`)}
                         </span>
                       </div>
 
-                      <p className="text-sm text-white/70 mb-2">
+                      <p className="text-sm text-foreground/80 mb-2">
                         {quote.clientDetails.companyName || quote.clientDetails.name || 'Geen klant'}
                       </p>
 
-                      <div className="flex items-center gap-4 text-xs text-white/50">
+                      <div className="flex items-center gap-4 text-xs text-muted-dark light-mode:text-muted-light">
                         <span className="flex items-center gap-1">
                           <Calendar className="h-3 w-3" />
                           {formatDate(quote.updatedAt)}

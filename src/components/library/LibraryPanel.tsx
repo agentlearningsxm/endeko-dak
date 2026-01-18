@@ -19,13 +19,13 @@ export function LibraryPanel() {
     useUIStore();
 
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col bg-panel-dark light-mode:bg-panel-light text-foreground">
       {/* Header */}
-      <div className="flex-none p-4 border-b border-white/[0.1]">
-        <h2 className="text-lg font-semibold text-white mb-3">{t('library.title')}</h2>
+      <div className="flex-none p-4 border-b border-border-dark light-mode:border-border-light">
+        <h2 className="text-lg font-semibold text-foreground mb-3">{t('library.title')}</h2>
 
         {/* Tabs */}
-        <div className="flex gap-1 p-1 rounded-lg bg-white/[0.03]">
+        <div className="flex gap-1 p-1 rounded-lg bg-background-dark light-mode:bg-gray-100 border border-border-dark light-mode:border-border-light">
           {tabs.map((tab) => (
             <button
               key={tab.id}
@@ -34,8 +34,8 @@ export function LibraryPanel() {
                 'flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-md',
                 'text-sm font-medium transition-all duration-200',
                 activeLibraryTab === tab.id
-                  ? 'bg-primary text-white'
-                  : 'text-white/60 hover:text-white hover:bg-white/[0.05]'
+                  ? 'bg-primary text-white shadow-sm'
+                  : 'text-muted-dark light-mode:text-muted-light hover:text-foreground hover:bg-white/5 light-mode:hover:bg-white'
               )}
             >
               <tab.icon className="h-4 w-4" />
@@ -53,6 +53,7 @@ export function LibraryPanel() {
             value={librarySearchQuery}
             onChange={(e) => setLibrarySearchQuery(e.target.value)}
             icon={<Search className="h-4 w-4" />}
+            className="matte-input"
           />
         </div>
       )}
@@ -65,8 +66,8 @@ export function LibraryPanel() {
       </div>
 
       {/* Footer hint */}
-      <div className="flex-none p-4 border-t border-white/[0.1]">
-        <p className="text-xs text-white/40 text-center">{t('library.dragToAdd')}</p>
+      <div className="flex-none p-4 border-t border-border-dark light-mode:border-border-light">
+        <p className="text-xs text-muted-dark light-mode:text-muted-light text-center">{t('library.dragToAdd')}</p>
       </div>
     </div>
   );

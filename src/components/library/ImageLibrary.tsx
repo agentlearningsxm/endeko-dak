@@ -91,7 +91,7 @@ export function ImageLibrary() {
 
       {/* Image grid */}
       {imageLibrary.length === 0 ? (
-        <div className="text-center py-8 text-white/40">
+        <div className="text-center py-8 text-muted-dark light-mode:text-muted-light">
           <Image className="h-10 w-10 mx-auto mb-3 opacity-50" />
           <p className="text-sm">Nog geen afbeeldingen</p>
         </div>
@@ -133,9 +133,9 @@ function DraggableImageItem({ image, onRemove }: DraggableImageItemProps) {
 
   const style = transform
     ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-        zIndex: isDragging ? 1000 : undefined,
-      }
+      transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      zIndex: isDragging ? 1000 : undefined,
+    }
     : undefined;
 
   return (
@@ -144,8 +144,8 @@ function DraggableImageItem({ image, onRemove }: DraggableImageItemProps) {
       style={style}
       className={cn(
         'relative group rounded-lg overflow-hidden border',
-        'bg-white/[0.03] border-white/[0.08]',
-        'hover:border-white/[0.15]',
+        'bg-background-dark light-mode:bg-white border-border-dark light-mode:border-border-light',
+        'hover:border-primary/50 hover:shadow-md',
         isDragging && 'opacity-50'
       )}
     >
@@ -179,7 +179,7 @@ function DraggableImageItem({ image, onRemove }: DraggableImageItemProps) {
 
       {/* Name */}
       <div className="p-2">
-        <p className="text-xs text-white/60 truncate">{image.name}</p>
+        <p className="text-xs text-muted-dark light-mode:text-muted-light truncate">{image.name}</p>
       </div>
     </div>
   );

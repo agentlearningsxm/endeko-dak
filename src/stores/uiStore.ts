@@ -36,6 +36,12 @@ interface UIState {
 
   // Sidebar
   isSidebarCollapsed: boolean;
+  isLibraryCollapsed: boolean;
+  isPreviewCollapsed: boolean;
+  isHeaderVisible: boolean;
+
+  // View state
+  currentView: 'login' | 'dashboard' | 'builder' | 'templates';
 }
 
 // ============ STORE ACTIONS ============
@@ -43,10 +49,16 @@ interface UIActions {
   // Library
   setActiveLibraryTab: (tab: LibraryTab) => void;
   setLibrarySearchQuery: (query: string) => void;
+  toggleLibrary: () => void; // New
+  toggleHeader: () => void; // New
 
   // Preview
   togglePreviewExpanded: () => void;
   setShowMobilePreview: (show: boolean) => void;
+  togglePreview: () => void; // New
+
+  // View actions
+  setCurrentView: (view: 'login' | 'dashboard' | 'builder' | 'templates') => void;
 
   // Modals
   openModal: (modal: ModalType, data?: unknown) => void;
@@ -71,8 +83,11 @@ export const useUIStore = create<UIState & UIActions>((set) => ({
   // Initial state
   activeLibraryTab: 'services',
   librarySearchQuery: '',
+  isLibraryCollapsed: false,
   isPreviewExpanded: false,
   showMobilePreview: false,
+  isPreviewCollapsed: false,
+  isHeaderVisible: true,
   activeModal: null,
   modalData: null,
   editingBlockId: null,
@@ -80,14 +95,18 @@ export const useUIStore = create<UIState & UIActions>((set) => ({
   draggedItemType: null,
   toasts: [],
   isSidebarCollapsed: false,
+  currentView: 'login',
 
   // Library actions
   setActiveLibraryTab: (tab) => set({ activeLibraryTab: tab }),
   setLibrarySearchQuery: (query) => set({ librarySearchQuery: query }),
+  toggleLibrary: () => set((s) => ({ isLibraryCollapsed: !s.isLibraryCollapsed })), // New
+  toggleHeader: () => set((s) => ({ isHeaderVisible: !s.isHeaderVisible })), // New
 
   // Preview actions
   togglePreviewExpanded: () => set((s) => ({ isPreviewExpanded: !s.isPreviewExpanded })),
   setShowMobilePreview: (show) => set({ showMobilePreview: show }),
+  togglePreview: () => set((s) => ({ isPreviewCollapsed: !s.isPreviewCollapsed })), // New
 
   // Modal actions
   openModal: (modal, data = null) => set({ activeModal: modal, modalData: data }),
@@ -116,6 +135,9 @@ export const useUIStore = create<UIState & UIActions>((set) => ({
 
   // Sidebar actions
   toggleSidebar: () => set((s) => ({ isSidebarCollapsed: !s.isSidebarCollapsed })),
+
+  // View actions
+  setCurrentView: (view) => set({ currentView: view }),
 }));
 
 // ============ AUTO-DISMISS TOASTS ============

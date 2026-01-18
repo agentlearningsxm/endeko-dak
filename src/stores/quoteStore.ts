@@ -8,6 +8,7 @@ import type {
   QuoteTemplate,
   ServiceBlockData,
   SavedImage,
+  SavedTemplate,
 } from '../types/blocks';
 import { createBlock } from '../types/blocks';
 import { DEFAULT_SERVICES, generateQuoteNumber } from '../lib/constants';
@@ -32,6 +33,7 @@ function createEmptyQuote(): Quote {
     clientDetails: createEmptyClientDetails(),
     blocks: [],
     template: 'modern',
+    templateBackgroundImage: null,
     status: 'draft',
     validityDays: 30,
     notes: '',
@@ -53,6 +55,9 @@ interface QuoteState {
 
   // Image library (uploaded images)
   imageLibrary: SavedImage[];
+
+  // Template library (custom saved templates)
+  savedTemplates: SavedTemplate[];
 }
 
 // ============ STORE ACTIONS ============
@@ -69,11 +74,13 @@ interface QuoteActions {
 
   // Quote management
   setTemplate: (template: QuoteTemplate) => void;
+  setTemplateBackgroundImage: (url: string | null) => void;
   setNotes: (notes: string) => void;
   saveCurrentQuote: () => void;
   loadQuote: (id: string) => void;
   createNewQuote: () => void;
   deleteQuote: (id: string) => void;
+  addSavedQuote: (quote: Quote) => void;
 
   // Library management
   addToServiceLibrary: (service: ServiceBlockData) => void;
@@ -83,6 +90,10 @@ interface QuoteActions {
   // Image library
   addImage: (src: string, name: string) => void;
   removeImage: (id: string) => void;
+
+  // Template library
+  addSavedTemplate: (name: string, imageUrl: string) => void;
+  deleteSavedTemplate: (id: string) => void;
 
   // Utilities
   clearCurrentQuote: () => void;
@@ -98,6 +109,7 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
       savedQuotes: [],
       serviceLibrary: DEFAULT_SERVICES,
       imageLibrary: [],
+      savedTemplates: [],
 
       // ============ BLOCK OPERATIONS ============
       addBlock: (type, data = {}, index) =>
@@ -195,6 +207,15 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
           },
         })),
 
+      setTemplateBackgroundImage: (url) =>
+        set((state) => ({
+          currentQuote: {
+            ...state.currentQuote,
+            templateBackgroundImage: url,
+            updatedAt: new Date().toISOString(),
+          },
+        })),
+
       setNotes: (notes) =>
         set((state) => ({
           currentQuote: {
@@ -247,6 +268,11 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
       deleteQuote: (id) =>
         set((state) => ({
           savedQuotes: state.savedQuotes.filter((q) => q.id !== id),
+        })),
+
+      addSavedQuote: (quote) =>
+        set((state) => ({
+          savedQuotes: [...state.savedQuotes, quote],
         })),
 
       // ============ SERVICE LIBRARY ============
@@ -321,6 +347,7 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
         savedQuotes: state.savedQuotes,
         serviceLibrary: state.serviceLibrary,
         imageLibrary: state.imageLibrary,
+        savedTemplates: state.savedTemplates,
       }),
     }
   )

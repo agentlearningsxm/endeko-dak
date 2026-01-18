@@ -21,12 +21,16 @@ import { SettingsModal } from './components/modals/SettingsModal';
 import { SavedQuotesModal } from './components/modals/SavedQuotesModal';
 import type { BlockType } from './types/blocks';
 
+import { LoginScreen } from './components/LoginScreen';
+import { DashboardScreen } from './components/DashboardScreen';
+import { TemplateLibrary } from './components/preview/TemplateLibrary';
+
 // Import i18n
 import './i18n';
 
 function App() {
   const { addBlock, reorderBlocks, currentQuote } = useQuoteStore();
-  const { setIsDragging, isDragging, activeModal } = useUIStore();
+  const { setIsDragging, isDragging, activeModal, currentView } = useUIStore();
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -77,35 +81,56 @@ function App() {
     }
   };
 
+  const renderView = () => {
+    switch (currentView) {
+      case 'login':
+        return <LoginScreen />;
+      case 'dashboard':
+        return <DashboardScreen />;
+      case 'builder':
+        return (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={handleDragEnd}
+          >
+            <AppShell
+              libraryPanel={<LibraryPanel />}
+              builderPanel={<BuilderCanvas />}
+              previewPanel={<PreviewPanel />}
+            />
+
+            {/* Drag Overlay */}
+            <DragOverlay>
+              {isDragging && (
+                <div className="px-4 py-2 rounded-lg bg-primary/20 border border-primary text-white text-sm font-medium shadow-lg backdrop-blur-md">
+                  Drag to add
+                </div>
+              )}
+            </DragOverlay>
+
+            {/* Modals */}
+            {activeModal === 'settings' && <SettingsModal />}
+            {activeModal === 'savedQuotes' && <SavedQuotesModal />}
+
+            {/* Toasts */}
+            <Toasts />
+          </DndContext>
+        );
+      case 'templates':
+        return <TemplateLibrary />;
+      default:
+        return <LoginScreen />;
+    }
+  };
+
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragStart={handleDragStart}
-      onDragEnd={handleDragEnd}
-    >
-      <AppShell
-        libraryPanel={<LibraryPanel />}
-        builderPanel={<BuilderCanvas />}
-        previewPanel={<PreviewPanel />}
-      />
-
-      {/* Drag Overlay */}
-      <DragOverlay>
-        {isDragging && (
-          <div className="px-4 py-2 rounded-lg bg-primary/20 border border-primary text-white text-sm font-medium shadow-lg">
-            Sleep om toe te voegen
-          </div>
-        )}
-      </DragOverlay>
-
-      {/* Modals */}
-      {activeModal === 'settings' && <SettingsModal />}
-      {activeModal === 'savedQuotes' && <SavedQuotesModal />}
-
-      {/* Toasts */}
-      <Toasts />
-    </DndContext>
+    <>
+      {renderView()}
+      {/* Global Toasts (Login/Dashboard also need toasts potentially) */}
+      {currentView !== 'builder' && <Toasts />}
+    </>
   );
 }
 

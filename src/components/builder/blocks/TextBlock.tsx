@@ -29,20 +29,20 @@ export function TextBlockComponent({ block }: TextBlockComponentProps) {
 
   const variantStyles = {
     paragraph: 'text-base',
-    heading: 'text-lg font-semibold',
-    note: 'text-sm italic bg-white/[0.03] p-3 rounded-lg',
-    terms: 'text-xs text-white/60',
-    disclaimer: 'text-xs text-white/50 italic',
+    heading: 'text-2xl font-bold bg-transparent border-none p-0 focus:ring-0',
+    note: 'text-sm italic bg-background-dark light-mode:bg-gray-100 p-4 rounded-xl border border-border-dark light-mode:border-border-light',
+    terms: 'text-xs text-muted-dark light-mode:text-muted-light',
+    disclaimer: 'text-xs text-muted-dark light-mode:text-muted-light italic',
   };
 
   return (
-    <div className="p-4">
+    <div className="p-6">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <div className="h-8 w-8 rounded-lg bg-secondary/20 flex items-center justify-center">
-          <Type className="h-4 w-4 text-secondary" />
+      <div className="flex items-center gap-3 mb-6">
+        <div className="h-10 w-10 rounded-lg bg-secondary/20 flex items-center justify-center shadow-sm">
+          <Type className="h-5 w-5 text-secondary" />
         </div>
-        <span className="font-medium text-white">{t(`text.variants.${data.variant}`)}</span>
+        <span className="font-bold text-foreground text-lg">{t(`text.variants.${data.variant}`)}</span>
       </div>
 
       {/* Content */}

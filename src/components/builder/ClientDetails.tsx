@@ -9,13 +9,13 @@ export function ClientDetails() {
   const { clientDetails } = currentQuote;
 
   return (
-    <div className="p-4">
-      <div className="flex items-center gap-2 mb-4">
+    <div className="p-6">
+      <div className="flex items-center gap-3 mb-6">
         <User className="h-5 w-5 text-primary" />
-        <h3 className="font-medium text-white">{t('builder.clientDetails')}</h3>
+        <h3 className="font-bold text-foreground text-lg">{t('builder.clientDetails')}</h3>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         <Input
           label={t('client.name')}
           value={clientDetails.name}

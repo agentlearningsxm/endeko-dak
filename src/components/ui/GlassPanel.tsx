@@ -17,9 +17,9 @@ const paddingClasses = {
 };
 
 const intensityClasses = {
-  low: 'bg-white/[0.02] border-white/[0.05]',
-  medium: 'bg-white/[0.05] border-white/[0.1]',
-  high: 'bg-white/[0.08] border-white/[0.15]',
+  low: 'bg-background-dark light-mode:bg-background-light border-border-dark light-mode:border-border-light',
+  medium: 'bg-panel-dark light-mode:bg-panel-light border-border-dark light-mode:border-border-light',
+  high: 'bg-[#1C2E4A] light-mode:bg-white border-primary/30',
 };
 
 export function GlassPanel({
@@ -32,10 +32,10 @@ export function GlassPanel({
   return (
     <div
       className={cn(
-        'rounded-xl backdrop-blur-xl border shadow-lg',
+        'rounded-xl border shadow-xl transition-colors duration-200',
         intensityClasses[intensity],
         paddingClasses[padding],
-        hover && 'transition-all duration-200 hover:bg-white/[0.08] hover:border-white/[0.2]',
+        hover && 'hover:border-primary/50 hover:shadow-2xl',
         className
       )}
     >
@@ -60,10 +60,10 @@ export function GlassCard({
     <div
       onClick={onClick}
       className={cn(
-        'p-3 rounded-lg border transition-all duration-200 cursor-pointer',
-        'bg-white/[0.03] border-white/[0.08]',
-        'hover:bg-white/[0.06] hover:border-white/[0.15]',
-        selected && 'bg-primary/20 border-primary/50',
+        'p-4 rounded-xl border transition-all duration-200 cursor-pointer shadow-sm',
+        'bg-panel-dark light-mode:bg-panel-light border-border-dark light-mode:border-border-light',
+        'hover:border-primary/50 hover:shadow-md',
+        selected && 'border-primary ring-1 ring-primary/20 bg-primary/5',
         className
       )}
     >

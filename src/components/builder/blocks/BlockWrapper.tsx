@@ -39,10 +39,10 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
       ref={setNodeRef}
       style={style}
       className={cn(
-        'group relative rounded-lg border transition-all duration-200',
-        'bg-white/[0.03] border-white/[0.08]',
-        'hover:border-white/[0.15]',
-        isDragging && 'opacity-50 z-50'
+        'group relative rounded-xl border transition-all duration-200',
+        'bg-panel-dark light-mode:bg-panel-light border-border-dark light-mode:border-border-light',
+        'hover:border-primary/50 hover:shadow-md',
+        isDragging && 'opacity-50 z-50 shadow-2xl'
       )}
     >
       {/* Drag handle */}
@@ -55,7 +55,7 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
           'opacity-0 group-hover:opacity-100 transition-opacity'
         )}
       >
-        <GripVertical className="h-5 w-5 text-white/30" />
+        <GripVertical className="h-5 w-5 text-muted-dark light-mode:text-muted-light" />
       </div>
 
       {/* Actions */}
@@ -83,7 +83,7 @@ export function BlockWrapper({ block, children }: BlockWrapperProps) {
       </div>
 
       {/* Content */}
-      <div className="pl-8 pr-20">{children}</div>
+      <div className="pl-8 pr-24">{children}</div>
     </div>
   );
 }

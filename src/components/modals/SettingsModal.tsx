@@ -48,10 +48,10 @@ export function SettingsModal() {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
       <GlassPanel className="w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-white/[0.1]">
-          <h2 className="text-lg font-semibold text-white">{t('settings.title')}</h2>
+        <div className="flex items-center justify-between p-4 border-b border-border-dark light-mode:border-border-light">
+          <h2 className="text-lg font-bold text-foreground">{t('settings.title')}</h2>
           <button onClick={closeModal} className="p-2 hover:bg-white/10 rounded-lg">
-            <X className="h-5 w-5 text-white/60" />
+            <X className="h-5 w-5 text-muted-dark light-mode:text-muted-light" />
           </button>
         </div>
 
@@ -59,7 +59,7 @@ export function SettingsModal() {
         <div className="flex-1 overflow-y-auto p-4 space-y-6">
           {/* Company Settings */}
           <div>
-            <h3 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-4">
+            <h3 className="text-xs font-bold text-muted-dark light-mode:text-muted-light uppercase tracking-widest mb-4">
               {t('settings.company')}
             </h3>
 
@@ -159,7 +159,7 @@ export function SettingsModal() {
 
           {/* App Settings */}
           <div>
-            <h3 className="text-sm font-semibold text-white/70 uppercase tracking-wide mb-4">
+            <h3 className="text-xs font-bold text-muted-dark light-mode:text-muted-light uppercase tracking-widest mb-4">
               {t('settings.app')}
             </h3>
 

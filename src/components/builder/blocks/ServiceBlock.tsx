@@ -53,17 +53,17 @@ export function ServiceBlockComponent({ block }: ServiceBlockComponentProps) {
   const lineTotal = data.price * data.quantity;
 
   return (
-    <div className="p-4">
+    <div className="p-6">
       {/* Header */}
-      <div className="flex items-center gap-2 mb-4">
-        <div className="h-8 w-8 rounded-lg bg-primary/20 flex items-center justify-center">
-          <FileText className="h-4 w-4 text-primary" />
+      <div className="flex items-center gap-3 mb-6">
+        <div className="h-10 w-10 rounded-lg bg-primary/20 flex items-center justify-center shadow-sm">
+          <FileText className="h-5 w-5 text-primary" />
         </div>
         <Input
           value={data.title}
           onChange={(e) => updateBlock(block.id, { title: e.target.value })}
           placeholder={t('service.title')}
-          className="flex-1 text-lg font-medium"
+          className="flex-1 text-xl font-bold bg-transparent border-none p-0 focus:ring-0"
         />
       </div>
 
@@ -77,8 +77,8 @@ export function ServiceBlockComponent({ block }: ServiceBlockComponentProps) {
       />
 
       {/* Specifications */}
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-white/70 mb-2">
+      <div className="mb-6">
+        <label className="block text-sm font-bold uppercase tracking-wider text-muted-dark light-mode:text-muted-light mb-3">
           {t('service.specifications')}
         </label>
 
@@ -87,7 +87,7 @@ export function ServiceBlockComponent({ block }: ServiceBlockComponentProps) {
             {data.items.map((item, index) => (
               <li
                 key={index}
-                className="flex items-center gap-2 text-sm text-white/80 group"
+                className="flex items-center gap-3 text-sm text-foreground group py-1"
               >
                 <span className="text-primary">•</span>
                 <span className="flex-1">{item}</span>
@@ -120,7 +120,7 @@ export function ServiceBlockComponent({ block }: ServiceBlockComponentProps) {
       </div>
 
       {/* Pricing */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-3 rounded-lg bg-white/[0.02]">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-background-dark light-mode:bg-gray-100 border border-border-dark light-mode:border-border-light">
         <Input
           label={t('service.price')}
           type="number"
@@ -155,10 +155,10 @@ export function ServiceBlockComponent({ block }: ServiceBlockComponentProps) {
       </div>
 
       {/* Line Total */}
-      <div className="flex justify-end mt-3 pt-3 border-t border-white/[0.1]">
+      <div className="flex justify-end mt-6 pt-6 border-t border-border-dark light-mode:border-border-light">
         <div className="text-right">
-          <span className="text-sm text-white/50">{t('service.total')}: </span>
-          <span className="text-lg font-semibold text-primary">
+          <span className="text-sm font-medium text-muted-dark light-mode:text-muted-light">{t('service.total')}: </span>
+          <span className="text-2xl font-bold text-primary">
             {formatCurrency(lineTotal)}
           </span>
         </div>

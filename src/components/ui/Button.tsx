@@ -3,19 +3,20 @@ import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children: ReactNode;
-  variant?: 'default' | 'primary' | 'ghost' | 'danger';
+  variant?: 'default' | 'primary' | 'ghost' | 'danger' | 'custom';
   size?: 'sm' | 'md' | 'lg' | 'icon';
 }
 
 const variantClasses = {
   default:
-    'bg-white/[0.05] border-white/[0.1] text-white hover:bg-white/[0.1] hover:border-white/[0.2]',
+    'bg-background-dark light-mode:bg-white border-border-dark light-mode:border-border-light text-foreground hover:border-primary/50',
   primary:
     'bg-primary border-primary text-white hover:bg-primary-hover hover:border-primary-hover',
   ghost:
-    'bg-transparent border-transparent text-white/70 hover:bg-white/[0.05] hover:text-white',
+    'bg-transparent border-transparent text-muted-dark light-mode:text-muted-light hover:text-foreground hover:bg-white/5 light-mode:hover:bg-black/5',
   danger:
-    'bg-error/20 border-error/50 text-error hover:bg-error/30',
+    'bg-error/10 border-error/50 text-error hover:bg-error/20',
+  custom: '',
 };
 
 const sizeClasses = {
@@ -62,7 +63,7 @@ export function IconButton({
     <button
       className={cn(
         'p-2 rounded-lg transition-all duration-200',
-        'text-white/50 hover:text-white hover:bg-white/[0.1]',
+        'text-muted-dark light-mode:text-muted-light hover:text-foreground hover:bg-white/5 light-mode:hover:bg-black/5',
         'focus:outline-none focus:ring-2 focus:ring-primary/50',
         className
       )}

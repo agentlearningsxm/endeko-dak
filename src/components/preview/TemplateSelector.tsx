@@ -10,31 +10,31 @@ const templates: {
   labelKey: string;
   descriptionKey: string;
 }[] = [
-  {
-    id: 'modern',
-    icon: LayoutTemplate,
-    labelKey: 'preview.templates.modern',
-    descriptionKey: 'Strak design',
-  },
-  {
-    id: 'classy',
-    icon: Crown,
-    labelKey: 'preview.templates.classy',
-    descriptionKey: 'Elegant',
-  },
-  {
-    id: 'technical',
-    icon: FileSpreadsheet,
-    labelKey: 'preview.templates.technical',
-    descriptionKey: 'Gedetailleerd',
-  },
-  {
-    id: 'compact',
-    icon: Minimize2,
-    labelKey: 'preview.templates.compact',
-    descriptionKey: 'Compact',
-  },
-];
+    {
+      id: 'modern',
+      icon: LayoutTemplate,
+      labelKey: 'preview.templates.modern',
+      descriptionKey: 'Strak design',
+    },
+    {
+      id: 'classy',
+      icon: Crown,
+      labelKey: 'preview.templates.classy',
+      descriptionKey: 'Elegant',
+    },
+    {
+      id: 'technical',
+      icon: FileSpreadsheet,
+      labelKey: 'preview.templates.technical',
+      descriptionKey: 'Gedetailleerd',
+    },
+    {
+      id: 'compact',
+      icon: Minimize2,
+      labelKey: 'preview.templates.compact',
+      descriptionKey: 'Compact',
+    },
+  ];
 
 export function TemplateSelector() {
   const { t } = useTranslation();
@@ -47,14 +47,17 @@ export function TemplateSelector() {
           key={template.id}
           onClick={() => setTemplate(template.id)}
           className={cn(
-            'p-2 rounded-lg border transition-all duration-200 text-center',
+            'p-3 rounded-lg border transition-all duration-200 text-center flex flex-col items-center justify-center gap-1',
             currentQuote.template === template.id
-              ? 'bg-primary/20 border-primary text-white'
-              : 'bg-white/[0.03] border-white/[0.08] text-white/60 hover:bg-white/[0.06] hover:border-white/[0.15] hover:text-white'
+              ? 'bg-primary border-primary text-white shadow-md'
+              : 'bg-panel-dark light-mode:bg-panel-light border-border-dark light-mode:border-border-light text-text-dark light-mode:text-text-light hover:border-primary/50'
           )}
         >
-          <template.icon className="h-5 w-5 mx-auto mb-1" />
-          <div className="text-xs font-medium">{t(template.labelKey)}</div>
+          <template.icon className={cn(
+            "h-5 w-5 mb-1",
+            currentQuote.template === template.id ? "text-white" : "text-primary"
+          )} />
+          <div className="text-xs font-bold uppercase tracking-tight">{t(template.labelKey)}</div>
         </button>
       ))}
     </div>

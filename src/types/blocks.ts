@@ -113,6 +113,7 @@ export interface Quote {
   clientDetails: ClientDetails;
   blocks: Block[];
   template: QuoteTemplate;
+  templateBackgroundImage: string | null;
   status: QuoteStatus;
   validityDays: number;
   notes: string;
@@ -126,6 +127,14 @@ export interface SavedImage {
   src: string;
   name: string;
   uploadedAt: string;
+}
+
+// ============ SAVED TEMPLATE ============
+export interface SavedTemplate {
+  id: string;
+  name: string;
+  imageUrl: string;
+  createdAt: string;
 }
 
 // ============ COMPANY SETTINGS ============

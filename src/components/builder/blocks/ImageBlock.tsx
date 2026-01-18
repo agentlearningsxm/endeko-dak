@@ -39,13 +39,13 @@ export function ImageBlockComponent({ block }: ImageBlockComponentProps) {
   };
 
   return (
-    <div className="p-4">
+    <div className="p-6">
       {/* Header */}
       <div className="flex items-center gap-2 mb-4">
-        <div className="h-8 w-8 rounded-lg bg-accent/20 flex items-center justify-center">
-          <ImageIcon className="h-4 w-4 text-accent" />
+        <div className="h-10 w-10 rounded-lg bg-accent/20 flex items-center justify-center shadow-sm">
+          <ImageIcon className="h-5 w-5 text-accent" />
         </div>
-        <span className="font-medium text-white">Afbeelding</span>
+        <span className="font-bold text-foreground text-lg">Afbeelding</span>
       </div>
 
       {/* Image Preview */}
@@ -64,8 +64,9 @@ export function ImageBlockComponent({ block }: ImageBlockComponentProps) {
           />
         </div>
       ) : (
-        <div className="mb-4 h-32 rounded-lg bg-white/[0.05] border border-dashed border-white/[0.2] flex items-center justify-center">
-          <span className="text-white/40 text-sm">Geen afbeelding</span>
+        <div className="mb-6 h-40 rounded-xl bg-background-dark light-mode:bg-gray-50 border-2 border-dashed border-border-dark light-mode:border-border-light flex flex-col items-center justify-center gap-2">
+          <ImageIcon className="h-8 w-8 text-muted-dark light-mode:text-muted-light opacity-50" />
+          <span className="text-muted-dark light-mode:text-muted-light text-sm font-medium">Geen afbeelding geselecteerd</span>
         </div>
       )}
 
