@@ -119,50 +119,54 @@ export function ServiceBlockComponent({ block }: ServiceBlockComponentProps) {
         </div>
       </div>
 
-      {/* Pricing */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-background-dark light-mode:bg-gray-100 border border-border-dark light-mode:border-border-light">
-        <Input
-          label={t('service.price')}
-          type="number"
-          step="0.01"
-          min="0"
-          value={data.price}
-          onChange={(e) => updateBlock(block.id, { price: parseFloat(e.target.value) || 0 })}
-        />
+      {/* Pricing - Only show if price is set (> 0) */}
+      {data.price > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4 rounded-xl bg-background-dark light-mode:bg-gray-100 border border-border-dark light-mode:border-border-light">
+          <Input
+            label={t('service.price')}
+            type="number"
+            step="0.01"
+            min="0"
+            value={data.price}
+            onChange={(e) => updateBlock(block.id, { price: parseFloat(e.target.value) || 0 })}
+          />
 
-        <Input
-          label={t('service.quantity')}
-          type="number"
-          step="1"
-          min="1"
-          value={data.quantity}
-          onChange={(e) => updateBlock(block.id, { quantity: parseInt(e.target.value) || 1 })}
-        />
+          <Input
+            label={t('service.quantity')}
+            type="number"
+            step="1"
+            min="1"
+            value={data.quantity}
+            onChange={(e) => updateBlock(block.id, { quantity: parseInt(e.target.value) || 1 })}
+          />
 
-        <Select
-          label={t('service.unit')}
-          value={data.unit}
-          onChange={(e) => updateBlock(block.id, { unit: e.target.value as ServiceUnit })}
-          options={unitOptions}
-        />
+          <Select
+            label={t('service.unit')}
+            value={data.unit}
+            onChange={(e) => updateBlock(block.id, { unit: e.target.value as ServiceUnit })}
+            options={unitOptions}
+          />
 
-        <Select
-          label="Categorie"
-          value={data.category}
-          onChange={(e) => updateBlock(block.id, { category: e.target.value as ServiceCategory })}
-          options={categoryOptions}
-        />
-      </div>
-
-      {/* Line Total */}
-      <div className="flex justify-end mt-6 pt-6 border-t border-border-dark light-mode:border-border-light">
-        <div className="text-right">
-          <span className="text-sm font-medium text-muted-dark light-mode:text-muted-light">{t('service.total')}: </span>
-          <span className="text-2xl font-bold text-primary">
-            {formatCurrency(lineTotal)}
-          </span>
+          <Select
+            label="Categorie"
+            value={data.category}
+            onChange={(e) => updateBlock(block.id, { category: e.target.value as ServiceCategory })}
+            options={categoryOptions}
+          />
         </div>
-      </div>
+      )}
+
+      {/* Line Total - Only show if price is set (> 0) */}
+      {data.price > 0 && (
+        <div className="flex justify-end mt-6 pt-6 border-t border-border-dark light-mode:border-border-light">
+          <div className="text-right">
+            <span className="text-sm font-medium text-muted-dark light-mode:text-muted-light">{t('service.total')}: </span>
+            <span className="text-2xl font-bold text-primary">
+              {formatCurrency(lineTotal)}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

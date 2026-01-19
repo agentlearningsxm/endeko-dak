@@ -1,5 +1,5 @@
 import { useTranslation } from 'react-i18next';
-import { FileText, Image, Type, Search } from 'lucide-react';
+import { FileText, Image, Type, Search, Plus } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useUIStore, type LibraryTab } from '../../stores/uiStore';
 import { Input } from '../ui';
@@ -15,7 +15,7 @@ const tabs: { id: LibraryTab; icon: typeof FileText; labelKey: string }[] = [
 
 export function LibraryPanel() {
   const { t } = useTranslation();
-  const { activeLibraryTab, setActiveLibraryTab, librarySearchQuery, setLibrarySearchQuery } =
+  const { activeLibraryTab, setActiveLibraryTab, librarySearchQuery, setLibrarySearchQuery, openModal } =
     useUIStore();
 
   return (
@@ -65,9 +65,20 @@ export function LibraryPanel() {
         {activeLibraryTab === 'text' && <TextLibrary />}
       </div>
 
-      {/* Footer hint */}
-      <div className="flex-none p-4 border-t border-border-dark light-mode:border-border-light">
-        <p className="text-xs text-muted-dark light-mode:text-muted-light text-center">{t('library.dragToAdd')}</p>
+      {/* Footer / Add Service */}
+      <div className="flex-none p-4 border-t border-border-dark light-mode:border-border-light bg-background-dark/50 light-mode:bg-gray-50/50">
+        {activeLibraryTab === 'services' && (
+          <button
+            onClick={() => openModal('serviceEditor')}
+            className="w-full mb-3 matte-button-primary py-2 text-sm"
+          >
+            <Plus className="h-4 w-4 mr-2" />
+            Add services
+          </button>
+        )}
+        <p className="text-[10px] text-muted-dark light-mode:text-muted-light text-center uppercase tracking-widest opacity-60">
+          {activeLibraryTab !== 'services' && t('library.dragToAdd')}
+        </p>
       </div>
     </div>
   );

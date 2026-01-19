@@ -35,10 +35,12 @@ export function AppShell({ libraryPanel, builderPanel, previewPanel }: AppShellP
     setCurrentView,
     isHeaderVisible,
     toggleHeader,
-    isPreviewExpanded
+    isPreviewExpanded,
+    isBuilderCollapsed,
+    toggleBuilder,
   } = useUIStore();
   const { app, setLanguage } = useSettingsStore();
-  const { createNewQuote } = useQuoteStore();
+  const { createNewQuote, activeProfile } = useQuoteStore();
 
   const toggleLanguage = () => {
     setLanguage(app.language === 'nl' ? 'en' : 'nl');
@@ -68,6 +70,10 @@ export function AppShell({ libraryPanel, builderPanel, previewPanel }: AppShellP
               <div>
                 <h1 className="text-xl font-bold text-foreground tracking-tight">{t('app.name')}</h1>
                 <p className="text-xs text-muted-dark light-mode:text-muted-light">Quote Builder</p>
+              </div>
+              {/* Active Profile Badge */}
+              <div className="ml-2 px-2 py-0.5 rounded bg-primary/20 border border-primary/30">
+                <span className="text-[10px] font-bold text-primary uppercase tracking-wide">{activeProfile}</span>
               </div>
             </div>
 
@@ -146,49 +152,89 @@ export function AppShell({ libraryPanel, builderPanel, previewPanel }: AppShellP
         </div>
       )}
 
-      {/* Main Content */}
+      {/* Main Content Area */}
       <main className="flex-1 flex overflow-hidden relative z-10 p-4 gap-4">
         <aside
           className={cn(
-            'flex-none transition-all duration-300 ease-in-out',
-            'matte-panel overflow-hidden flex flex-col',
-            isLibraryCollapsed ? 'w-12' : 'w-80'
+            'transition-all duration-300 ease-in-out',
+            'matte-panel overflow-hidden flex flex-col relative',
+            // If builder is hidden, this becomes a main panel (flex-1), otherwise sidebar (flex-none)
+            isBuilderCollapsed ? (isLibraryCollapsed ? 'flex-none w-4' : 'flex-1') : (isLibraryCollapsed ? 'flex-none w-4' : 'flex-none w-80')
           )}
         >
-          <div className="h-10 border-b border-border-dark light-mode:border-border-light flex items-center justify-between px-3 bg-panel-dark light-mode:bg-panel-light">
-            {!isLibraryCollapsed && <span className="text-xs font-bold uppercase tracking-wider text-muted-dark light-mode:text-muted-light">Tools</span>}
-            <button onClick={toggleLibrary} className="p-1 hover:bg-white/5 light-mode:hover:bg-black/5 rounded transition-colors ml-auto text-muted-dark light-mode:text-muted-light">
-              {isLibraryCollapsed ? <Menu className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-            </button>
-          </div>
-          <div className={cn("flex-1 overflow-y-auto overflow-x-hidden", isLibraryCollapsed && "invisible")}>
+          {/* Library Toggle (Absolute) */}
+          <button
+            onClick={toggleLibrary}
+            className={cn(
+              "absolute top-2 z-20 p-1 rounded-r-md bg-panel-dark light-mode:bg-panel-light border border-l-0 border-border-dark light-mode:border-border-light text-muted-dark light-mode:text-muted-light hover:text-primary transition-all",
+              isLibraryCollapsed ? "-right-4 shadow-md" : "right-2 bg-transparent border-none"
+            )}
+            title={isLibraryCollapsed ? "Show Library" : "Hide Library"}
+          >
+            {isLibraryCollapsed ? <ChevronRight className="w-3 h-3" /> : <ChevronLeft className="w-4 h-4" />}
+          </button>
+
+          <div className={cn("flex-1 overflow-y-auto overflow-x-hidden pt-1", isLibraryCollapsed && "opacity-0 invisible")}>
             {libraryPanel}
           </div>
         </aside>
 
         {/* Center Panel - Builder */}
-        <section className="flex-1 overflow-hidden flex flex-col relative rounded-xl border border-border-dark light-mode:border-border-light bg-background-dark light-mode:bg-gray-100 shadow-inner">
+        <section
+          className={cn(
+            "transition-all duration-500 ease-in-out overflow-hidden flex flex-col relative rounded-xl border border-border-dark light-mode:border-border-light bg-background-dark light-mode:bg-gray-100 shadow-inner",
+            isBuilderCollapsed ? "w-0 border-none opacity-0 flex-none scale-y-0 origin-bottom" : "flex-1 scale-y-100 origin-top"
+          )}
+          style={{ marginBottom: isBuilderCollapsed ? '-100vh' : '0' }} // Helper to ensure it feels like it slides away
+        >
+          {/* Slide Down Hide Trigger */}
+          <div className="absolute top-0 left-0 right-0 h-6 z-20 flex justify-center opacity-0 hover:opacity-100 transition-opacity">
+            <button
+              onClick={toggleBuilder}
+              className="bg-panel-dark light-mode:bg-panel-light border-x border-b border-border-dark light-mode:border-border-light rounded-b-lg px-4 py-1 shadow-sm hover:h-6 h-5 flex items-center justify-center transition-all"
+              title="Slide Scale Down (Hide)"
+            >
+              <ChevronLeft className="w-3 h-3 -rotate-90 text-muted-dark hover:text-primary" />
+            </button>
+          </div>
+
           {/* Editor Area */}
-          <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute inset-0 overflow-hidden pt-4">
             {builderPanel}
           </div>
         </section>
 
+        {/* Restore Builder Trigger (Floating Bottom) */}
+        {isBuilderCollapsed && (
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-50 animate-in slide-in-from-bottom-10 fade-in duration-300">
+            <button
+              onClick={toggleBuilder}
+              className="flex items-center gap-2 px-4 py-2 rounded-full bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105 transition-all font-medium text-sm"
+            >
+              <Plus className="w-4 h-4" />
+              <span>Show Editor</span>
+            </button>
+          </div>
+        )}
+
         {/* Right Panel - Preview */}
         <aside
           className={cn(
-            'flex-none transition-all duration-300 ease-in-out',
+            'transition-all duration-300 ease-in-out',
             'matte-panel overflow-hidden flex flex-col',
-            isPreviewExpanded
-              ? 'flex-1 w-full border-none shadow-none z-30' // Expanded style
-              : isPreviewCollapsed ? 'w-12 border-none bg-transparent shadow-none' : 'w-96' // Standard/Collapsed style
+            // If builder is hidden, this expands to fill space, otherwise sidebar sizing
+            isBuilderCollapsed
+              ? (isPreviewCollapsed ? 'flex-none w-12' : 'flex-1') // Expanded mode
+              : (isPreviewExpanded ? 'flex-1 w-full border-none shadow-none z-30' : isPreviewCollapsed ? 'flex-none w-12 border-none bg-transparent shadow-none' : 'flex-none w-96') // Standard mode
           )}
         >
           {!isPreviewExpanded && (
             <div className={cn("h-10 border-b border-border-dark light-mode:border-border-light flex items-center px-3 bg-panel-dark light-mode:bg-panel-light", isPreviewCollapsed ? "justify-center bg-transparent border-none" : "justify-between")}>
-              <button onClick={togglePreview} className="p-1 hover:bg-white/5 light-mode:hover:bg-black/5 rounded transition-colors mr-auto text-muted-dark light-mode:text-muted-light">
-                {isPreviewCollapsed ? <Menu className="w-4 h-4 bg-panel-dark light-mode:bg-white shadow border border-border-dark rounded p-1 w-8 h-8" /> : <ChevronRight className="w-4 h-4" />}
-              </button>
+              <div className="flex items-center gap-2">
+                <button onClick={togglePreview} className="p-1 hover:bg-white/5 light-mode:hover:bg-black/5 rounded transition-colors text-muted-dark light-mode:text-muted-light">
+                  {isPreviewCollapsed ? <Menu className="w-4 h-4 bg-panel-dark light-mode:bg-white shadow border border-border-dark rounded p-1 w-8 h-8" /> : <ChevronRight className="w-4 h-4" />}
+                </button>
+              </div>
               {!isPreviewCollapsed && <span className="text-xs font-bold uppercase tracking-wider text-muted-dark light-mode:text-muted-light">Live Preview</span>}
             </div>
           )}

@@ -1,20 +1,16 @@
-import { useTranslation } from 'react-i18next';
-import { Settings, Check, Plus, Image as ImageIcon } from 'lucide-react';
+import { Plus, Check } from 'lucide-react';
 import { useQuoteStore } from '../../stores/quoteStore';
 import { useUIStore } from '../../stores/uiStore';
 import { cn } from '../../lib/utils';
 import { Button } from '../ui';
 
 export function TemplateManager() {
-    const { t } = useTranslation();
     const { currentQuote, setTemplateBackgroundImage, savedTemplates } = useQuoteStore();
     const { setCurrentView } = useUIStore();
 
     const handleSelectTemplate = (url: string) => {
         setTemplateBackgroundImage(url);
     };
-
-    const isCustomActive = !!currentQuote.templateBackgroundImage;
 
     return (
         <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">

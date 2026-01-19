@@ -348,12 +348,14 @@ export function QuoteDocument({ quote, company, totals, vatRate }: QuoteDocument
           </Text>
         </View>
 
-        {/* Blocks */}
-        {quote.blocks.map((block) => (
-          <BlockRenderer key={block.id} block={block} styles={styles} />
-        ))}
+        {/* Blocks - Wrapped in flex-1 to push totals down */}
+        <View style={{ flex: 1 }}>
+          {quote.blocks.map((block) => (
+            <BlockRenderer key={block.id} block={block} styles={styles} />
+          ))}
+        </View>
 
-        {/* Totals */}
+        {/* Totals - Pushed to bottom */}
         {quote.blocks.some((b) => b.type === 'service') && (
           <View style={styles.totalsSection}>
             <View style={styles.totalsRow}>
@@ -403,7 +405,6 @@ function BlockRenderer({ block, styles }: { block: Block; styles: ReturnType<typ
 
 function ServiceBlockPDF({ block, styles }: { block: ServiceBlock; styles: ReturnType<typeof StyleSheet.create> }) {
   const { data } = block;
-  const lineTotal = data.price * data.quantity;
 
   return (
     <View style={styles.serviceBlock}>
@@ -417,13 +418,6 @@ function ServiceBlockPDF({ block, styles }: { block: ServiceBlock; styles: Retur
           ))}
         </View>
       )}
-
-      <View style={styles.servicePricing}>
-        <Text style={styles.servicePrice}>
-          {data.quantity} {data.unit} × {formatCurrency(data.price)}
-        </Text>
-        <Text style={styles.serviceTotal}>{formatCurrency(lineTotal)}</Text>
-      </View>
     </View>
   );
 }

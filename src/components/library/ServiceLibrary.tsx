@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
+import { useState } from 'react';
 import { useDraggable } from '@dnd-kit/core';
-import { GripVertical, FileText } from 'lucide-react';
+import { GripVertical, FileText, ChevronDown, ChevronUp, Plus } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useQuoteStore } from '../../stores/quoteStore';
 import { useUIStore } from '../../stores/uiStore';
-import { formatCurrency } from '../../lib/constants';
 import type { ServiceBlockData } from '../../types/blocks';
 
 export function ServiceLibrary() {
@@ -45,6 +45,9 @@ interface DraggableServiceItemProps {
 
 function DraggableServiceItem({ service, index }: DraggableServiceItemProps) {
   const { t } = useTranslation();
+  const { addBlock } = useQuoteStore();
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: `library-service-${index}`,
     data: {
@@ -65,18 +68,20 @@ function DraggableServiceItem({ service, index }: DraggableServiceItemProps) {
     <div
       ref={setNodeRef}
       style={style}
-      {...listeners}
-      {...attributes}
       className={cn(
         'p-4 rounded-xl border transition-all duration-200',
         'bg-background-dark light-mode:bg-gray-50 border-border-dark light-mode:border-border-light',
         'hover:border-primary/50 hover:shadow-md',
-        'cursor-grab active:cursor-grabbing',
         isDragging && 'opacity-50 scale-[1.02] shadow-xl'
       )}
     >
       <div className="flex items-start gap-4">
-        <div className="flex-none mt-1">
+        {/* Drag Handle - ONLY this part is draggable */}
+        <div
+          {...listeners}
+          {...attributes}
+          className="flex-none mt-1 cursor-grab active:cursor-grabbing p-1 -m-1 rounded hover:bg-white/5"
+        >
           <GripVertical className="h-4 w-4 text-muted-dark light-mode:text-muted-light" />
         </div>
 
@@ -86,16 +91,59 @@ function DraggableServiceItem({ service, index }: DraggableServiceItemProps) {
               <FileText className="h-3 w-3 text-primary" />
             </div>
             <h4 className="text-sm font-bold text-foreground truncate">{service.title}</h4>
+
+            {/* Direct Add Button */}
+            <button
+              onClick={() => addBlock('service', service)}
+              className="ml-auto p-1 rounded-full bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+              title="Add to quote"
+            >
+              <Plus className="h-3 w-3" />
+            </button>
           </div>
 
-          <p className="text-xs text-muted-dark light-mode:text-muted-light line-clamp-2 mb-3">{service.description}</p>
+          {/* Description with expand/collapse */}
+          <div className="mb-2">
+            <p className={cn(
+              "text-xs text-muted-dark light-mode:text-muted-light transition-all duration-200",
+              isExpanded ? "" : "line-clamp-2"
+            )}>
+              {service.description}
+            </p>
+
+            {/* Show items when expanded */}
+            {isExpanded && service.items && service.items.length > 0 && (
+              <ul className="mt-2 space-y-1 pl-4 border-l-2 border-primary/30">
+                {service.items.map((item, i) => (
+                  <li key={i} className="text-xs text-muted-dark light-mode:text-muted-light">
+                    • {item}
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            {/* Always show expand button for ALL services */}
+            <button
+              onClick={() => setIsExpanded(!isExpanded)}
+              className="mt-1 text-[10px] text-primary hover:underline flex items-center gap-0.5"
+            >
+              {isExpanded ? (
+                <>
+                  <ChevronUp className="h-3 w-3" />
+                  <span>Show less</span>
+                </>
+              ) : (
+                <>
+                  <ChevronDown className="h-3 w-3" />
+                  <span>Show more</span>
+                </>
+              )}
+            </button>
+          </div>
 
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-dark light-mode:text-muted-light uppercase tracking-wider">
               {t(`categories.${service.category}`)}
-            </span>
-            <span className="text-sm font-bold text-primary">
-              {formatCurrency(service.price)}/{t(`units.${service.unit}`)}
             </span>
           </div>
         </div>

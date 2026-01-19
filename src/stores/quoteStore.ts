@@ -13,6 +13,25 @@ import type {
 import { createBlock } from '../types/blocks';
 import { DEFAULT_SERVICES, generateQuoteNumber } from '../lib/constants';
 
+import {
+  saveProfileData,
+  loadProfileData,
+  requestRootFolder,
+  isWorkspaceConfigured,
+  listAvailableProfiles,
+  deleteProfileFolder
+} from '../utils/fileSync';
+
+// ============ DISK SYNC HELPER ============
+async function syncToDisk(profileName: string, data: any) {
+  if (!profileName) return;
+  try {
+    await saveProfileData(profileName, data);
+  } catch (error) {
+    console.error(`Failed to sync profile ${profileName}:`, error);
+  }
+}
+
 // ============ HELPER FUNCTIONS ============
 function createEmptyClientDetails(): ClientDetails {
   return {
@@ -58,6 +77,14 @@ interface QuoteState {
 
   // Template library (custom saved templates)
   savedTemplates: SavedTemplate[];
+
+  // Persistence status
+  isLocalSyncActive: boolean;
+  lastSyncedAt: string | null;
+
+  // Profile management
+  activeProfile: string;
+  profiles: string[];
 }
 
 // ============ STORE ACTIONS ============
@@ -97,7 +124,17 @@ interface QuoteActions {
 
   // Utilities
   clearCurrentQuote: () => void;
+  updatePricing: (pricing: Partial<{ isManualPricing: boolean; manualSubtotal: number; manualVat: number }>) => void;
   getQuoteTotals: () => { subtotal: number; vat: number; total: number };
+  loadFromDisk: () => Promise<void>;
+  setupWorkspace: () => Promise<void>;
+  checkWorkspaceStatus: () => Promise<void>;
+
+  // Profile actions
+  createProfile: (name: string) => Promise<void>;
+  switchProfile: (name: string) => Promise<void>;
+  deleteProfile: (name: string) => Promise<void>;
+  refreshProfiles: () => Promise<void>;
 }
 
 // ============ STORE IMPLEMENTATION ============
@@ -110,6 +147,10 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
       serviceLibrary: DEFAULT_SERVICES,
       imageLibrary: [],
       savedTemplates: [],
+      isLocalSyncActive: false,
+      lastSyncedAt: null,
+      activeProfile: 'default',
+      profiles: ['default'],
 
       // ============ BLOCK OPERATIONS ============
       addBlock: (type, data = {}, index) =>
@@ -312,6 +353,25 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
           imageLibrary: state.imageLibrary.filter((img) => img.id !== id),
         })),
 
+      // ============ TEMPLATE LIBRARY ============
+      addSavedTemplate: (name, imageUrl) =>
+        set((state) => ({
+          savedTemplates: [
+            ...state.savedTemplates,
+            {
+              id: crypto.randomUUID(),
+              name,
+              imageUrl,
+              createdAt: new Date().toISOString(),
+            },
+          ],
+        })),
+
+      deleteSavedTemplate: (id) =>
+        set((state) => ({
+          savedTemplates: state.savedTemplates.filter((t) => t.id !== id),
+        })),
+
       // ============ UTILITIES ============
       clearCurrentQuote: () =>
         set((state) => ({
@@ -320,12 +380,33 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
             blocks: [],
             clientDetails: createEmptyClientDetails(),
             notes: '',
+            isManualPricing: false,
+            manualSubtotal: 0,
+            manualVat: 0,
+            updatedAt: new Date().toISOString(),
+          },
+        })),
+
+      updatePricing: (pricing) =>
+        set((state) => ({
+          currentQuote: {
+            ...state.currentQuote,
+            ...pricing,
             updatedAt: new Date().toISOString(),
           },
         })),
 
       getQuoteTotals: () => {
         const state = get();
+        const { isManualPricing, manualSubtotal, manualVat } = state.currentQuote;
+
+        if (isManualPricing) {
+          const subtotal = manualSubtotal || 0;
+          const vat = manualVat || 0;
+          const total = subtotal + vat;
+          return { subtotal, vat, total };
+        }
+
         const subtotal = state.currentQuote.blocks
           .filter((b): b is Block & { type: 'service' } => b.type === 'service')
           .reduce((sum, block) => {
@@ -339,16 +420,139 @@ export const useQuoteStore = create<QuoteState & QuoteActions>()(
 
         return { subtotal, vat, total };
       },
+
+      loadFromDisk: async () => {
+        const { activeProfile } = get();
+        try {
+          const data = await loadProfileData(activeProfile);
+          if (data) {
+            set((state) => ({
+              ...state,
+              ...data,
+              isLocalSyncActive: true,
+            }));
+          }
+        } catch (error) {
+          console.error('Failed to load from local file:', error);
+        }
+      },
+
+      setupWorkspace: async () => {
+        try {
+          const success = await requestRootFolder();
+          if (success) {
+            set({ isLocalSyncActive: true });
+            await get().refreshProfiles();
+            // Try to load current active profile from the new folder
+            await get().loadFromDisk();
+          }
+        } catch (error) {
+          console.error('Failed to setup workspace:', error);
+        }
+      },
+
+      checkWorkspaceStatus: async () => {
+        const configured = await isWorkspaceConfigured();
+        set({ isLocalSyncActive: configured });
+        if (configured) {
+          await get().refreshProfiles();
+        }
+      },
+
+      createProfile: async (name: string) => {
+        if (!name) return;
+        set({ activeProfile: name });
+        // Initial sync for new profile (empty states)
+        const state = get();
+        const dataToSync = {
+          savedQuotes: [],
+          serviceLibrary: DEFAULT_SERVICES,
+          imageLibrary: [],
+          savedTemplates: [],
+        };
+        await syncToDisk(name, dataToSync);
+        set((state) => ({
+          ...state,
+          ...dataToSync,
+          profiles: Array.from(new Set([...state.profiles, name])),
+          lastSyncedAt: new Date().toISOString(),
+        }));
+      },
+
+      switchProfile: async (name: string) => {
+        set({ activeProfile: name });
+        await get().loadFromDisk();
+      },
+
+      deleteProfile: async (name: string) => {
+        const { activeProfile, profiles } = get();
+
+        // 1. Delete from disk
+        const success = await deleteProfileFolder(name);
+
+        if (success) {
+          // 2. Remove from list
+          const newProfiles = profiles.filter(p => p !== name);
+
+          set({ profiles: newProfiles });
+
+          // 3. If we deleted the active profile, switch to the first available one or default
+          if (activeProfile === name) {
+            const nextProfile = newProfiles[0] || 'default';
+            if (newProfiles.length === 0) {
+              await get().createProfile('default');
+            } else {
+              await get().switchProfile(nextProfile);
+            }
+          }
+        }
+      },
+
+      refreshProfiles: async () => {
+        const profiles = await listAvailableProfiles();
+        if (profiles.length > 0) {
+          set({ profiles });
+        }
+      },
     }),
+    // Persistence
     {
       name: 'endeko-quote-storage',
       storage: createJSONStorage(() => localStorage),
       partialize: (state) => ({
-        savedQuotes: state.savedQuotes,
-        serviceLibrary: state.serviceLibrary,
-        imageLibrary: state.imageLibrary,
-        savedTemplates: state.savedTemplates,
+        activeProfile: state.activeProfile,
+        profiles: state.profiles,
       }),
+      onRehydrateStorage: () => {
+        return (rehydratedState, error) => {
+          if (!error && rehydratedState) {
+            rehydratedState.checkWorkspaceStatus();
+            rehydratedState.loadFromDisk();
+          }
+        };
+      },
     }
   )
 );
+
+// ============ AUTO SYNC TO DISK ============
+useQuoteStore.subscribe((state, prevState) => {
+  // Only sync if actual data changed (to avoid circular updates or redundant writes)
+  const hasChanged =
+    JSON.stringify(state.savedQuotes) !== JSON.stringify(prevState.savedQuotes) ||
+    JSON.stringify(state.serviceLibrary) !== JSON.stringify(prevState.serviceLibrary) ||
+    JSON.stringify(state.imageLibrary) !== JSON.stringify(prevState.imageLibrary) ||
+    JSON.stringify(state.savedTemplates) !== JSON.stringify(prevState.savedTemplates);
+
+  if (hasChanged && state.isLocalSyncActive) {
+    const dataToSync = {
+      savedQuotes: state.savedQuotes,
+      serviceLibrary: state.serviceLibrary,
+      imageLibrary: state.imageLibrary,
+      savedTemplates: state.savedTemplates,
+    };
+    syncToDisk(state.activeProfile, dataToSync).then(() => {
+      useQuoteStore.setState({ lastSyncedAt: new Date().toISOString() });
+    });
+  }
+});

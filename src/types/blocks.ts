@@ -117,6 +117,9 @@ export interface Quote {
   status: QuoteStatus;
   validityDays: number;
   notes: string;
+  isManualPricing?: boolean;
+  manualSubtotal?: number;
+  manualVat?: number;
   createdAt: string;
   updatedAt: string;
 }

@@ -42,6 +42,9 @@ interface UIState {
 
   // View state
   currentView: 'login' | 'dashboard' | 'builder' | 'templates';
+
+  // Builder panel
+  isBuilderCollapsed: boolean;
 }
 
 // ============ STORE ACTIONS ============
@@ -76,6 +79,9 @@ interface UIActions {
 
   // Sidebar
   toggleSidebar: () => void;
+
+  // Builder
+  toggleBuilder: () => void;
 }
 
 // ============ STORE IMPLEMENTATION ============
@@ -138,6 +144,10 @@ export const useUIStore = create<UIState & UIActions>((set) => ({
 
   // View actions
   setCurrentView: (view) => set({ currentView: view }),
+
+  // Builder actions
+  isBuilderCollapsed: false,
+  toggleBuilder: () => set((s) => ({ isBuilderCollapsed: !s.isBuilderCollapsed })),
 }));
 
 // ============ AUTO-DISMISS TOASTS ============

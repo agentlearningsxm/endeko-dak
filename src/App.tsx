@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   DndContext,
   DragOverlay,
@@ -19,18 +20,32 @@ import { PreviewPanel } from './components/preview';
 import { Toasts } from './components/Toasts';
 import { SettingsModal } from './components/modals/SettingsModal';
 import { SavedQuotesModal } from './components/modals/SavedQuotesModal';
+import { AddServiceModal } from './components/modals/AddServiceModal';
 import type { BlockType } from './types/blocks';
 
 import { LoginScreen } from './components/LoginScreen';
 import { DashboardScreen } from './components/DashboardScreen';
 import { TemplateLibrary } from './components/preview/TemplateLibrary';
+import { ProfileManager } from './components/common/ProfileManager';
 
 // Import i18n
 import './i18n';
 
 function App() {
-  const { addBlock, reorderBlocks, currentQuote } = useQuoteStore();
+  const {
+    addBlock,
+    reorderBlocks,
+    currentQuote,
+    loadFromDisk,
+    checkWorkspaceStatus
+  } = useQuoteStore();
   const { setIsDragging, isDragging, activeModal, currentView } = useUIStore();
+
+  useEffect(() => {
+    // Initial load from local file system
+    loadFromDisk();
+    checkWorkspaceStatus();
+  }, [loadFromDisk, checkWorkspaceStatus]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -113,6 +128,7 @@ function App() {
             {/* Modals */}
             {activeModal === 'settings' && <SettingsModal />}
             {activeModal === 'savedQuotes' && <SavedQuotesModal />}
+            {activeModal === 'serviceEditor' && <AddServiceModal />}
 
             {/* Toasts */}
             <Toasts />
@@ -126,11 +142,15 @@ function App() {
   };
 
   return (
-    <>
-      {renderView()}
+    <div className="h-screen flex flex-col overflow-hidden">
+      {/* Full ProfileManager only on Login screen */}
+      {currentView === 'login' && <ProfileManager />}
+      <div className="flex-1 relative overflow-hidden">
+        {renderView()}
+      </div>
       {/* Global Toasts (Login/Dashboard also need toasts potentially) */}
       {currentView !== 'builder' && <Toasts />}
-    </>
+    </div>
   );
 }
 
